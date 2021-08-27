@@ -9,12 +9,21 @@
   "minTemperature": 16,
   "maxTemperature": 30,
   "precision": 1,
+  "defaults": {
+    "operationMode": "cool",
+    "fanMode": "auto",
+    "swingMode": "all"
+  },
   "operationModes": [
     "auto",
     "cool",
     "dry",
     "fan_only",
     "heat"
+  ],
+  "extraOperationModes": [
+    "cool_se",
+    "heat_8"
   ],
   "fanModes": [
     "auto",
@@ -23,8 +32,8 @@
     "high"
   ],
   "swingModes": [
-    "top",
     "all",
+    "top",
     "mid_top",
     "mid",
     "mid_bottom",
