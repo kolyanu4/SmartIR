@@ -11,10 +11,12 @@ from homeassistant.components.climate.const import (
     HVAC_MODE_OFF, HVAC_MODE_HEAT, HVAC_MODE_COOL,
     HVAC_MODE_DRY, HVAC_MODE_FAN_ONLY, HVAC_MODE_AUTO,
     SUPPORT_TARGET_TEMPERATURE, SUPPORT_FAN_MODE,
-    SUPPORT_SWING_MODE, HVAC_MODES, ATTR_HVAC_MODE)
+    SUPPORT_SWING_MODE, HVAC_MODES, ATTR_HVAC_MODE
+)
 from homeassistant.const import (
     CONF_NAME, STATE_ON, STATE_OFF, STATE_UNKNOWN, ATTR_TEMPERATURE,
-    PRECISION_TENTHS, PRECISION_HALVES, PRECISION_WHOLE)
+    PRECISION_TENTHS, PRECISION_HALVES, PRECISION_WHOLE
+)
 from homeassistant.core import callback
 from homeassistant.helpers.event import async_track_state_change
 import homeassistant.helpers.config_validation as cv
@@ -63,10 +65,12 @@ def handle_exception_deco(exception=Exception, error_msg=None):
         def wrapped(*args, **kwargs):
             try:
                 return func(*args, **kwargs)
-            except exception:
+            except exception:  # noqa
                 exception_msg = error_msg or 'Exception happen during execution'
                 _LOGGER.exception(exception_msg)
+
         return wrapped
+
     return deco
 
 
@@ -76,10 +80,12 @@ def async_handle_exception_deco(exception=Exception, error_msg=None):
         async def wrapped(*args, **kwargs):
             try:
                 return await func(*args, **kwargs)
-            except exception:
+            except exception:  # noqa
                 exception_msg = error_msg or 'Exception happen during execution'
                 _LOGGER.exception(exception_msg)
+
         return wrapped
+
     return deco
 
 
@@ -101,7 +107,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
 
         try:
             codes_source = ("https://raw.githubusercontent.com/"
-                            "smartHomeHub/SmartIR/master/"
+                            "kolyanu4/SmartIR/master/"
                             "codes/climate/{}.json")
 
             await Helper.downloader(codes_source.format(device_code), device_json_path)
@@ -443,7 +449,7 @@ class SmartIRClimate(ClimateEntity, RestoreEntity):
 
     async def _async_power_sensor_changed(self, entity_id, old_state, new_state):
         """Handle power sensor changes."""
-        if new_state is None:
+        if new_state is None or old_state is None:
             return
 
         if old_state is not None and new_state.state == old_state.state:

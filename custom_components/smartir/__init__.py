@@ -20,16 +20,9 @@ _LOGGER = logging.getLogger(__name__)
 
 DOMAIN = 'smartir'
 VERSION = '1.17.1'
-MANIFEST_URL = (
-    "https://raw.githubusercontent.com/"
-    "smartHomeHub/SmartIR/{}/"
-    "custom_components/smartir/manifest.json")
-REMOTE_BASE_URL = (
-    "https://raw.githubusercontent.com/"
-    "smartHomeHub/SmartIR/{}/"
-    "custom_components/smartir/")
-COMPONENT_ABS_DIR = os.path.dirname(
-    os.path.abspath(__file__))
+MANIFEST_URL = "https://raw.githubusercontent.com/kolyanu4/SmartIR/{}/custom_components/smartir/manifest.json"
+REMOTE_BASE_URL = "https://raw.githubusercontent.com/kolyanu4/SmartIR/{}/custom_components/smartir/"
+COMPONENT_ABS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 CONF_CHECK_UPDATES = 'check_updates'
 CONF_UPDATE_BRANCH = 'update_branch'
@@ -41,6 +34,7 @@ CONFIG_SCHEMA = vol.Schema({
             ['master', 'rc'])
     })
 }, extra=vol.ALLOW_EXTRA)
+
 
 async def async_setup(hass, config):
     """Set up the SmartIR component."""
@@ -66,12 +60,13 @@ async def async_setup(hass, config):
 
     return True
 
+
 async def _update(hass, branch, do_update=False, notify_if_latest=True):
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(MANIFEST_URL.format(branch)) as response:
                 if response.status == 200:
-                    
+
                     data = await response.json(content_type='text/plain')
                     min_ha_version = data['homeassistant']
                     last_version = data['updater']['version']
@@ -80,14 +75,16 @@ async def _update(hass, branch, do_update=False, notify_if_latest=True):
                     if StrictVersion(last_version) <= StrictVersion(VERSION):
                         if notify_if_latest:
                             hass.components.persistent_notification.async_create(
-                                "You're already using the latest version!", 
-                                title='SmartIR')
+                                "You're already using the latest version!",
+                                title='SmartIR'
+                            )
                         return
 
                     if StrictVersion(current_ha_version) < StrictVersion(min_ha_version):
                         hass.components.persistent_notification.async_create(
                             "There is a new version of SmartIR integration, but it is **incompatible** "
-                            "with your system. Please first update Home Assistant.", title='SmartIR')
+                            "with your system. Please first update Home Assistant.", title='SmartIR'
+                        )
                         return
 
                     if do_update is False:
@@ -95,7 +92,8 @@ async def _update(hass, branch, do_update=False, notify_if_latest=True):
                             "A new version of SmartIR integration is available ({}). "
                             "Call the ``smartir.update_component`` service to update "
                             "the integration. \n\n **Release notes:** \n{}"
-                            .format(last_version, release_notes), title='SmartIR')
+                            .format(last_version, release_notes), title='SmartIR'
+                        )
                         return
 
                     # Begin update
@@ -115,15 +113,18 @@ async def _update(hass, branch, do_update=False, notify_if_latest=True):
                     if has_errors:
                         hass.components.persistent_notification.async_create(
                             "There was an error updating one or more files of SmartIR. "
-                            "Please check the logs for more information.", title='SmartIR')
+                            "Please check the logs for more information.", title='SmartIR'
+                        )
                     else:
                         hass.components.persistent_notification.async_create(
                             "Successfully updated to {}. Please restart Home Assistant."
-                            .format(last_version), title='SmartIR')
+                            .format(last_version), title='SmartIR'
+                        )
     except Exception:
-       _LOGGER.error("An error occurred while checking for updates.")
+        _LOGGER.error("An error occurred while checking for updates.")
 
-class Helper():
+
+class Helper:
     @staticmethod
     async def downloader(source, dest):
         async with aiohttp.ClientSession() as session:

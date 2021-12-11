@@ -1,9 +1,9 @@
 {
   "domain": "smartir",
   "name": "SmartIR",
-  "documentation": "https://github.com/smartHomeHub/SmartIR",
+  "documentation": "https://github.com/kolyanu4/SmartIR",
   "dependencies": [],
-  "codeowners": ["@smartHomeHub"],
+  "codeowners": ["@kolyanu4"],
   "requirements": ["aiofiles==0.6.0"],
   "homeassistant": "0.115.0",
   "version": "1.17.1",
